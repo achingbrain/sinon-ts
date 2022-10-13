@@ -1,56 +1,151 @@
 {
-  "name": "ts-sinon",
-  "version": "2.0.2",
+  "name": "sinon-ts",
+  "version": "0.0.0",
   "description": "sinon library extension to stub whole object and interfaces",
-  "author": {
-    "name": "Tomasz Tarnowski",
-    "email": "t.tarnowski90@gmail.com",
-    "url": "https://github.com/ttarnowski"
-  },
-  "bugs": {
-    "url": "https://github.com/ttarnowski/ts-sinon/issues"
-  },
-  "homepage": "https://github.com/ttarnowski/ts-sinon",
-  "license": "MIT",
-  "keywords": [
-    "typescript",
-    "node",
-    "sinon",
-    "ts-sinon",
-    "interface stub",
-    "interface mock",
-    "typescript stub",
-    "stub",
-    "typescript sinon"
-  ],
+  "author": "Alex Potsides <alex@achingbrain.net>",
+  "license": "Apache-2.0 OR MIT",
+  "homepage": "https://github.com/achingbrain/sinon-ts#readme",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ttarnowski/ts-sinon.git"
+    "url": "git+https://github.com/achingbrain/sinon-ts.git"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "/dist"
+  "bugs": {
+    "url": "https://github.com/achingbrain/sinon-ts/issues"
+  },
+  "keywords": [
+    "interface mock",
+    "interface stub",
+    "node",
+    "sinon",
+    "stub",
+    "ts-sinon",
+    "typescript",
+    "typescript sinon",
+    "typescript stub"
   ],
-  "scripts": {
-    "build": "tsc",
-    "prepare": "npm run build",
-    "test": "./node_modules/.bin/mocha -r ts-node/register ./src/index.spec.ts"
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
   },
-  "dependencies": {
-    "@types/node": "^14.6.1",
-    "@types/sinon": "^9.0.5",
-    "@types/sinon-chai": "^3.2.4",
-    "sinon": "^9.0.3"
+  "type": "module",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "src",
+    "dist/src",
+    "!dist/test",
+    "!**/*.tsbuildinfo"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "eslintConfig": {
+    "extends": "ipfs",
+    "parserOptions": {
+      "sourceType": "module"
+    }
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits",
+          "releaseRules": [
+            {
+              "breaking": true,
+              "release": "major"
+            },
+            {
+              "revert": true,
+              "release": "patch"
+            },
+            {
+              "type": "feat",
+              "release": "minor"
+            },
+            {
+              "type": "fix",
+              "release": "patch"
+            },
+            {
+              "type": "docs",
+              "release": "patch"
+            },
+            {
+              "type": "test",
+              "release": "patch"
+            },
+            {
+              "type": "deps",
+              "release": "patch"
+            },
+            {
+              "scope": "no-release",
+              "release": false
+            }
+          ]
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "types": [
+              {
+                "type": "feat",
+                "section": "Features"
+              },
+              {
+                "type": "fix",
+                "section": "Bug Fixes"
+              },
+              {
+                "type": "chore",
+                "section": "Trivial Changes"
+              },
+              {
+                "type": "docs",
+                "section": "Documentation"
+              },
+              {
+                "type": "deps",
+                "section": "Dependencies"
+              },
+              {
+                "type": "test",
+                "section": "Tests"
+              }
+            ]
+          }
+        }
+      ],
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
+  },
+  "scripts": {
+    "clean": "aegir clean",
+    "lint": "aegir lint",
+    "build": "aegir build",
+    "test": "aegir test",
+    "release": "aegir release"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.12",
-    "@types/mocha": "^8.0.3",
-    "chai": "^4.2.0",
-    "mocha": "^8.1.2",
-    "rimraf": "^3.0.2",
-    "sinon-chai": "^3.5.0",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.2"
+    "@types/sinon-chai": "^3.2.8",
+    "aegir": "^37.5.6",
+    "sinon-chai": "^3.7.0"
+  },
+  "peerDependencies": {
+    "@types/sinon": "^9.0.5",
+    "sinon": "^9.0.3"
   }
 }
