@@ -15,8 +15,8 @@
 - [Object constructor stub example](#object-constructor-stub-example)
 - [Sinon methods](#sinon-methods)
 - [Packages](#packages)
-      - [Dependencies:](#dependencies)
-      - [Dev Dependencies:](#dev-dependencies)
+  - [Dependencies:](#dependencies)
+  - [Dev Dependencies:](#dev-dependencies)
 - [Tests](#tests)
 - [License](#license)
 - [Contribute](#contribute)
@@ -238,13 +238,13 @@ const tsStubInterface = tsSinon.stubInterface<T>();
 
 ## Packages
 
-##### Dependencies:
+### Dependencies:
 
 1. [Microsoft/TypeScript](https://github.com/Microsoft/TypeScript)
 2. [TypeStrong/ts-node](https://github.com/TypeStrong/ts-node)
 3. [sinonjs/sinon](https://github.com/sinonjs/sinon)
 
-##### Dev Dependencies:
+### Dev Dependencies:
 
 4. [mochajs/mocha](https://github.com/mochajs/mocha)
 5. [chaijs/chai](https://github.com/chaijs/chai)
