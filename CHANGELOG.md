@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/achingbrain/sinon-ts/compare/v1.0.0...v1.0.1) (2023-11-01)
+
+
+### Dependencies
+
+* **dev:** bump aegir from 37.12.1 to 41.1.4 ([#9](https://github.com/achingbrain/sinon-ts/issues/9)) ([756bea6](https://github.com/achingbrain/sinon-ts/commit/756bea6bde8ec5e85d5d1c33cbd9e208954a5c58))
+
 ## 1.0.0 (2022-10-14)
 
 
