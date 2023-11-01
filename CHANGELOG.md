@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/achingbrain/sinon-ts/compare/v1.0.1...v1.0.2) (2023-11-01)
+
+
+### Dependencies
+
+* **dev:** bump sinon from 14.0.2 to 17.0.1 ([#11](https://github.com/achingbrain/sinon-ts/issues/11)) ([7e668b2](https://github.com/achingbrain/sinon-ts/commit/7e668b2baf57aff2784de5d3cf2848c9d79a80bd))
+
 ## [1.0.1](https://github.com/achingbrain/sinon-ts/compare/v1.0.0...v1.0.1) (2023-11-01)
 
 
