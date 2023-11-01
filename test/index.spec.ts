@@ -1,7 +1,7 @@
 import { chai } from 'aegir/chai'
+import Sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 import { stubObject, stubInterface, stubConstructor } from '../src/index.js'
-import Sinon from 'sinon'
 
 chai.use(sinonChai)
 const expect = chai.expect

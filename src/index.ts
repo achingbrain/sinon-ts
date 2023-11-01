@@ -168,7 +168,7 @@ export function stubObject<T extends object> (object: T, partial?: Partial<T>): 
 
   if (partial != null) {
     for (const key in partial) {
-      if (excludedMethods.includes(key) === true) {
+      if (excludedMethods.includes(key)) {
         continue
       }
 
