@@ -23,15 +23,11 @@
     "typescript sinon",
     "typescript stub"
   ],
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0"
-  },
   "type": "module",
   "types": "./dist/src/index.d.ts",
   "files": [
     "src",
-    "dist/src",
+    "dist",
     "!dist/test",
     "!**/*.tsbuildinfo"
   ],
@@ -44,6 +40,7 @@
   "eslintConfig": {
     "extends": "ipfs",
     "parserOptions": {
+      "project": true,
       "sourceType": "module"
     }
   },
@@ -137,12 +134,13 @@
     "lint": "aegir lint",
     "build": "aegir build",
     "test": "aegir test",
-    "release": "aegir release"
+    "release": "aegir release",
+    "docs": "aegir docs"
   },
   "devDependencies": {
     "@types/sinon": "^10.0.13",
     "@types/sinon-chai": "^3.2.8",
-    "aegir": "^38.1.7",
+    "aegir": "^41.1.4",
     "sinon": "^14.0.1",
     "sinon-chai": "^3.7.0"
   },
