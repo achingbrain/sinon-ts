@@ -21,6 +21,7 @@ A fork of [ts-sinon](https://www.npmjs.com/package/ts-sinon) that lets you BYO s
 Stub all object methods
 
 ```javascript
+import Sinon from 'sinon'
 import { stubObject } from 'ts-sinon'
 
 class Test {
@@ -40,31 +41,17 @@ expect(testStub.method()).to.equal('stubbed')
 Partial stub
 
 ```typescript
-class Test {
-  public someProp: string = 'test'
-  methodA() { return 'A: original' }
-  methodB() { return 'B: original' }
-}
+import Sinon from 'sinon'
+import { stubObject } from 'ts-sinon'
 
-const test = new Test()
-// second argument must be existing class method name, in this case only 'methodA' or 'methodB' are accepted.
-const testStub = stubObject<Test>(test, ['methodA'])
-
-expect(testStub.methodA()).to.be.undefined
-expect(testStub.methodB()).to.equal('B: original')
-```
-
-## Example
-
-Stub with predefined return values (type-safe)
-
-```typescript
 class Test {
   method() { return 'original' }
 }
 
 const test = new Test()
-const testStub = stubObject<Test>(test, { method: 'stubbed' })
+const testStub = stubObject<Test>(test, {
+  method: Sinon.stub().returns('stubbed')
+})
 
 expect(testStub.method()).to.equal('stubbed')
 ```
@@ -74,6 +61,7 @@ expect(testStub.method()).to.equal('stubbed')
 Interface stub (stub all methods)
 
 ```typescript
+import Sinon from 'sinon'
 import { stubInterface } from 'ts-sinon'
 
 interface Test {
@@ -94,12 +82,17 @@ expect(testStub.method()).to.equal('stubbed')
 Interface stub with predefined return values (type-safe)
 
 ```typescript
+import Sinon from 'sinon'
+import { stubInterface } from 'ts-sinon'
+
 interface Test {
   method(): string
 }
 
 // method property has to be the same type as method() return type
-const testStub = stubInterface<Test>({ method: 'stubbed' })
+const testStub = stubInterface<Test>({
+  method: Sinon.stub().returns('stubbed')
+})
 
 expect(testStub.method()).to.equal('stubbed')
 ```
@@ -111,6 +104,7 @@ Object constructor stub (stub all methods)
 - without passing predefined args to the constructor:
 
 ```typescript
+import Sinon from 'sinon'
 import { stubConstructor } from 'ts-sinon'
 
 class Test {
@@ -142,6 +136,9 @@ expect(testStub.someVar).to.equal(20)
 Passing predefined args to the constructor
 
 ```typescript
+import Sinon from 'sinon'
+import { stubConstructor } from 'ts-sinon'
+
 class Test {
   constructor(public someVar: string, y: boolean) {}
   // ...
@@ -151,18 +148,6 @@ class Test {
 const testStub = stubConstructor(Test, 'someValue', true)
 
 expect(testStub.someVar).to.equal('someValue')
-```
-
-## Sinon methods
-
-By importing 'ts-sinon' you have access to all sinon methods.
-
-```typescript
-import sinon, { stubInterface } from 'ts-sinon'
-
-const functionStub = sinon.stub()
-const spy = sinon.spy()
-// ...
 ```
 
 # Install

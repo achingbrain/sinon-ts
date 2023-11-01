@@ -1,4 +1,5 @@
 import { chai } from 'aegir/chai'
+import Sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 import { stubObject, stubInterface, stubConstructor } from '../src/index.js'
 
@@ -92,30 +93,6 @@ describe('ts-sinon', () => {
       })
     })
 
-    it('returns partial stub object with only "test" method stubbed when array with "test" has been given', () => {
-      const object = new class {
-        private readonly r: string
-        constructor () {
-          this.r = 'run'
-        }
-
-        test (): number {
-          return 123
-        }
-
-        run (): string {
-          return this.r
-        }
-      }()
-
-      const objectStub = stubObject(object, ['test'])
-
-      expect(objectStub.test()).to.be.undefined()
-      expect(objectStub.run()).to.equal('run')
-
-      expect(objectStub.test).to.have.been.called()
-    })
-
     it('returns partial stub object with "run" method stubbed and returning "some val" value when key value map { run: "some val" } has been given', () => {
       const object = new class {
         test (): number {
@@ -127,7 +104,9 @@ describe('ts-sinon', () => {
         }
       }()
 
-      const objectStub = stubObject(object, { run: 'some val' })
+      const objectStub = stubObject(object, {
+        run: Sinon.stub().returns('some val')
+      })
 
       expect(objectStub.run()).to.equal('some val')
       expect(objectStub.test()).to.equal(123)
@@ -153,12 +132,20 @@ describe('ts-sinon', () => {
       expect(stub.prop1).to.equal('x')
     })
 
+    it('sets an "x" value on "prop1" property from constructor', () => {
+      const stub = stubInterface<ITest>({
+        prop1: 'x'
+      })
+
+      expect(stub.prop1).to.equal('x')
+    })
+
     it('returns stub object created from interface with all methods stubbed with "method2" predefined to return value of "abc" and "method1" which is testable with expect that has been called', () => {
       const expectedMethod2Arg: number = 2
       const expectedMethod2ReturnValue = 'abc'
 
       const interfaceStub: ITest = stubInterface<ITest>({
-        method2: expectedMethod2ReturnValue
+        method2: Sinon.stub().returns(expectedMethod2ReturnValue)
       })
 
       const object = new class {
@@ -180,7 +167,7 @@ describe('ts-sinon', () => {
 
     it('returns stub object created from interface with all methods stubbed including "method2" predefined to return "x" when method map to value { method: x } has been given', () => {
       const interfaceStub: ITest = stubInterface<ITest>({
-        method2: 'test'
+        method2: Sinon.stub().returns('test')
       })
 
       const object = new class {
