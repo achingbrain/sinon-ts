@@ -15,6 +15,7 @@
  * @example Stub all object methods
  *
  * ```javascript
+ * import Sinon from 'sinon'
  * import { stubObject } from 'ts-sinon'
  *
  * class Test {
@@ -32,29 +33,17 @@
  * @example Partial stub
  *
  * ```typescript
- * class Test {
- *   public someProp: string = 'test'
- *   methodA() { return 'A: original' }
- *   methodB() { return 'B: original' }
- * }
+ * import Sinon from 'sinon'
+ * import { stubObject } from 'ts-sinon'
  *
- * const test = new Test()
- * // second argument must be existing class method name, in this case only 'methodA' or 'methodB' are accepted.
- * const testStub = stubObject<Test>(test, ['methodA'])
- *
- * expect(testStub.methodA()).to.be.undefined
- * expect(testStub.methodB()).to.equal('B: original')
- * ```
- *
- * @example Stub with predefined return values (type-safe)
- *
- * ```typescript
  * class Test {
  *   method() { return 'original' }
  * }
  *
  * const test = new Test()
- * const testStub = stubObject<Test>(test, { method: 'stubbed' })
+ * const testStub = stubObject<Test>(test, {
+ *   method: Sinon.stub().returns('stubbed')
+ * })
  *
  * expect(testStub.method()).to.equal('stubbed')
  * ```
@@ -62,6 +51,7 @@
  * @example Interface stub (stub all methods)
  *
  * ```typescript
+ * import Sinon from 'sinon'
  * import { stubInterface } from 'ts-sinon'
  *
  * interface Test {
@@ -80,12 +70,17 @@
  * @example Interface stub with predefined return values (type-safe)
  *
  * ```typescript
+ * import Sinon from 'sinon'
+ * import { stubInterface } from 'ts-sinon'
+ *
  * interface Test {
  *   method(): string
  * }
  *
  * // method property has to be the same type as method() return type
- * const testStub = stubInterface<Test>({ method: 'stubbed' })
+ * const testStub = stubInterface<Test>({
+ *   method: Sinon.stub().returns('stubbed')
+ * })
  *
  * expect(testStub.method()).to.equal('stubbed')
  * ```
@@ -95,6 +90,7 @@
  * - without passing predefined args to the constructor:
  *
  * ```typescript
+ * import Sinon from 'sinon'
  * import { stubConstructor } from 'ts-sinon'
  *
  * class Test {
@@ -124,6 +120,9 @@
  * @example Passing predefined args to the constructor
  *
  * ```typescript
+ * import Sinon from 'sinon'
+ * import { stubConstructor } from 'ts-sinon'
+ *
  * class Test {
  *   constructor(public someVar: string, y: boolean) {}
  *   // ...
@@ -134,21 +133,9 @@
  *
  * expect(testStub.someVar).to.equal('someValue')
  * ```
- *
- * ## Sinon methods
- *
- * By importing 'ts-sinon' you have access to all sinon methods.
- *
- * ```typescript
- * import sinon, { stubInterface } from 'ts-sinon'
- *
- * const functionStub = sinon.stub()
- * const spy = sinon.spy()
- * // ...
- * ```
  */
 
-import sinon from 'sinon'
+import Sinon from 'sinon'
 
 export type StubbedInstance<T> = sinon.SinonStubbedInstance<T> & T
 
@@ -157,13 +144,7 @@ export type AllowedKeys<T, Condition> = {
   T[Key] extends Condition ? Key : never
 }[keyof T]
 
-export type ObjectMethodsKeys<T> = Array<AllowedKeys<T, (...args: any[]) => any>>
-
-export type ObjectMethodsMap<T> = {
-  [Key in keyof T]?: T[Key] extends (...args: any[]) => any ? ReturnType<T[Key]> : never
-}
-
-export function stubObject<T extends object> (object: T, methods?: ObjectMethodsKeys<T> | ObjectMethodsMap<T>): StubbedInstance<T> {
+export function stubObject<T extends object> (object: T, partial?: Partial<T>): StubbedInstance<T> {
   const stubObject: any = Object.assign({}, object)
   const objectMethods = getObjectMethods(object)
   const excludedMethods: string[] = [
@@ -185,20 +166,19 @@ export function stubObject<T extends object> (object: T, methods?: ObjectMethods
     }
   }
 
-  if (Array.isArray(methods)) {
-    for (const method of methods) {
-      stubObject[method] = sinon.stub()
-    }
-  } else if (typeof methods === 'object') {
-    for (const method in methods) {
-      stubObject[method] = sinon.stub()
-      stubObject[method].returns(methods[method])
+  if (partial != null) {
+    for (const key in partial) {
+      if (excludedMethods.includes(key) === true) {
+        continue
+      }
+
+      stubObject[key] = partial[key]
     }
   } else {
     for (const method of objectMethods) {
       // @ts-expect-error cannot index object by string
       if (typeof object[method] === 'function' && method !== 'constructor') {
-        stubObject[method] = sinon.stub()
+        stubObject[method] = Sinon.stub()
       }
     }
   }
@@ -213,13 +193,13 @@ export function stubConstructor<T extends new (...args: any[]) => any> (
   return stubObject(new constructor(...constructorArgs))
 }
 
-export function stubInterface<T extends object> (methods: ObjectMethodsMap<T> = {}): StubbedInstance<T> {
+export function stubInterface<T extends object> (methods: Partial<T> = {}): StubbedInstance<T> {
   const object: any = stubObject<any>({}, methods)
 
   return new Proxy(object, {
     get: (target, name) => {
       if (!Object.prototype.hasOwnProperty.call(target, name) && name !== 'then') {
-        target[name] = sinon.stub()
+        target[name] = Sinon.stub()
       }
 
       return target[name]
