@@ -1,3 +1,14 @@
+## [2.0.0](https://github.com/achingbrain/sinon-ts/compare/v1.0.2...v2.0.0) (2023-11-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* method map values must now be wrapped in `Sinon.stub().returns()`
+
+### Features
+
+* support stubbed properties as well as methods ([#12](https://github.com/achingbrain/sinon-ts/issues/12)) ([42413b2](https://github.com/achingbrain/sinon-ts/commit/42413b24dafc625df5048e5ce58dce2755749099))
+
 ## [1.0.2](https://github.com/achingbrain/sinon-ts/compare/v1.0.1...v1.0.2) (2023-11-01)
 
 
