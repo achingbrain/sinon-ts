@@ -1,6 +1,5 @@
 import { chai } from 'aegir/chai'
 import sinonChai from 'sinon-chai'
-
 import { stubObject, stubInterface, stubConstructor } from '../src/index.js'
 
 chai.use(sinonChai)
@@ -11,11 +10,11 @@ describe('ts-sinon', () => {
     describe('when no methods or method map given', () => {
       it('returns stub es6 object with all methods stubbed', () => {
         class A {
-          test () {
+          test (): number {
             return 123
           }
 
-          run () {
+          run (): string {
             return 'run'
           }
         }
@@ -58,20 +57,20 @@ describe('ts-sinon', () => {
 
       it('allows to change stub values', () => {
         const object1 = new class {
-          methodA () {
+          methodA (): string {
             return 'A'
           }
 
-          methodB () {
+          methodB (): string {
             return 'B'
           }
         }()
 
         const object2 = {
-          methodC: () => {
+          methodC: (): string => {
             return 'C'
           },
-          methodD: () => {
+          methodD: (): string => {
             return 'D'
           }
         }
@@ -95,18 +94,18 @@ describe('ts-sinon', () => {
 
     it('returns partial stub object with only "test" method stubbed when array with "test" has been given', () => {
       const object = new class {
-                private readonly r: string;
-                constructor () {
-                  this.r = 'run'
-                }
+        private readonly r: string
+        constructor () {
+          this.r = 'run'
+        }
 
-                test () {
-                  return 123
-                }
+        test (): number {
+          return 123
+        }
 
-                run () {
-                  return this.r
-                }
+        run (): string {
+          return this.r
+        }
       }()
 
       const objectStub = stubObject(object, ['test'])
@@ -119,11 +118,11 @@ describe('ts-sinon', () => {
 
     it('returns partial stub object with "run" method stubbed and returning "some val" value when key value map { run: "some val" } has been given', () => {
       const object = new class {
-        test () {
+        test (): number {
           return 123
         }
 
-        run () {
+        run (): string {
           return 'run'
         }
       }()
@@ -142,8 +141,8 @@ describe('ts-sinon', () => {
   describe('stubInterface', () => {
     interface ITest {
       prop1: string
-      method1: () => void
-      method2: (num: number) => string
+      method1(): void
+      method2(num: number): string
     }
 
     it('sets an "x" value on "prop1" property', () => {
@@ -163,15 +162,15 @@ describe('ts-sinon', () => {
       })
 
       const object = new class {
-                test: ITest;
-                constructor (test: ITest) {
-                  this.test = test
-                  this.test.method1()
-                }
+        test: ITest
+        constructor (test: ITest) {
+          this.test = test
+          this.test.method1()
+        }
 
-                run (num: number): string {
-                  return this.test.method2(num)
-                }
+        run (num: number): string {
+          return this.test.method2(num)
+        }
       }(interfaceStub)
 
       expect(object.run(expectedMethod2Arg)).to.equal(expectedMethod2ReturnValue)
@@ -185,15 +184,15 @@ describe('ts-sinon', () => {
       })
 
       const object = new class {
-                test: ITest;
-                constructor (test: ITest) {
-                  this.test = test
-                  this.test.method1()
-                }
+        test: ITest
+        constructor (test: ITest) {
+          this.test = test
+          this.test.method1()
+        }
 
-                run (num: number): string {
-                  return this.test.method2(num)
-                }
+        run (num: number): string {
+          return this.test.method2(num)
+        }
       }(interfaceStub)
 
       expect(object.run(123)).to.equal('test')
@@ -218,7 +217,7 @@ describe('ts-sinon', () => {
 
     it('stubs method to return resolved Promise with another interface stub', async () => {
       interface Test {
-        methodA: () => Promise<ITest>
+        methodA(): Promise<ITest>
       }
 
       const interfaceTestStub = stubInterface<Test>()
@@ -231,7 +230,7 @@ describe('ts-sinon', () => {
 
     it('stubs method to return rejected Promise with another interface stub', async () => {
       interface Test {
-        methodA: () => Promise<ITest>
+        methodA(): Promise<ITest>
       }
 
       const interfaceTestStub = stubInterface<Test>()
@@ -250,20 +249,20 @@ describe('ts-sinon', () => {
   describe('stubConstructor', () => {
     it('stubs all object constructor methods', () => {
       class A {
-                // @ts-expect-error pp is not read
-                private readonly pp = 5;
-                public ps: string = 'x';
+        // @ts-expect-error pp is not read
+        private readonly pp = 5
+        public ps: string = 'x'
 
-                // @ts-expect-error pt is not read
-                constructor (private readonly pt: string, public px: number, y: boolean) {}
+        // @ts-expect-error pt is not read
+        constructor (private readonly pt: string, public px: number, y: boolean) {}
 
-                method1 (): string {
-                  return 'value1'
-                }
+        method1 (): string {
+          return 'value1'
+        }
 
-                method2 (x: number): number {
-                  return 13
-                }
+        method2 (x: number): number {
+          return 13
+        }
       }
       const expectedNewMethod1Value = 'new value'
       const expectedNewMethod2Value = 43
