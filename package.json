@@ -141,7 +141,7 @@
   "devDependencies": {
     "@types/sinon": "^10.0.13",
     "@types/sinon-chai": "^3.2.8",
-    "aegir": "^41.1.4",
+    "aegir": "^42.0.1",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0"
   },
